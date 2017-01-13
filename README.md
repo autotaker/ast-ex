@@ -16,7 +16,8 @@ stack exec toyml example/sample1.ml # read from file
 ```
 e ::= id
     | int_literal | bool_literal
-    | e op e
+    | prefix_op e
+    | e infix_op e
     | `let` id `=` e `in` e
     | `fun` id `->` e
     | e e
@@ -26,5 +27,8 @@ e ::= id
 id ::= [a-zA-z][a-zA-z'_]*
 int_literal ::= digit+
 bool_literal ::= `true` | `false`
-op ::= `*` | `/` | `+` | `-` | `<` | `>` | `=` | `<>` | `<=` | `>=`  
+infix_op ::= `*` | `/` 
+           | `+` | `-` 
+           | `<` | `>` | `=` | `<>` | `<=` | `>=`  
+prefix_op ::= `+` | `-`
 ```
