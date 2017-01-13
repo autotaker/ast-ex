@@ -8,8 +8,8 @@ stack build
 
 ### Run
 ```
-stack exec ast-ex                    # run repl
-stack exec ast-ex example/sample1.ml # read from file
+stack exec toyml                    # run repl
+stack exec toyml example/sample1.ml # read from file
 ```
 
 ## Syntax of ToyML
@@ -23,6 +23,7 @@ e ::= id
     | `if` e `then` e 
     | `if` e `then` e `else` e
     | e `&&` e | e `||` e
+id ::= [a-zA-z][a-zA-z'_]*
 int_literal ::= digit+
 bool_literal ::= `true` | `false`
 op ::= `*` | `/` | `+` | `-` | `<` | `>` | `=` | `<>` | `<=` | `>=`  
