@@ -4,7 +4,6 @@ import Language.ToyML.Syntax.Base
 import Text.Parsec.Pos(SourcePos)
 import Text.Parsec.Expr(Assoc(..))
 import Text.PrettyPrint.HughesPJClass
-import Prelude hiding(Ordering(..))
 
 data Lit = CInt Integer | CBool Bool
 data Op = Op { headChar :: Char, opName :: String }
@@ -87,8 +86,8 @@ condInfo Or  = (2, "||", AssocLeft)
 instance Pretty Exp where
     pPrintPrec l prec (Exp label arg _) = prettyParen (dPrec < prec) doc
         where
-        binary :: String -> Rational -> Assoc -> Exp -> Exp -> (Rational, Doc)
-        binary name opPrec assoc e1 e2 = (opPrec, d1 <+> text name <+> d2)
+        binary :: Doc -> Rational -> Assoc -> Exp -> Exp -> (Rational, Doc)
+        binary name opPrec assoc e1 e2 = (opPrec, d1 <+> name <+> d2)
             where
             (lPrec,rPrec) = case assoc of
                 AssocLeft -> (opPrec, opPrec + 1)
@@ -100,12 +99,12 @@ instance Pretty Exp where
             (SVar, x) -> (10, text x)
             (SLiteral, CInt i) -> (if i >= 0 then 10 else 9, integer i)
             (SLiteral, CBool b) -> (10, text $ if b then "true" else "false")
-            (SInfix, (op,e1,e2)) -> binary (opName op) opPrec assoc e1 e2
+            (SInfix, (op,e1,e2)) -> binary (text (opName op)) opPrec assoc e1 e2
                 where
                 (opPrec, assoc) = infixInfo (headChar op)
             (SPrefix, (op,e)) -> (opPrec, text (opName op) <+> pPrintPrec l (opPrec + 1) e)
                 where opPrec = prefixInfo (headChar op)
-            (SApp, (e1, e2)) -> binary "" 9 AssocLeft e1 e2
+            (SApp, (e1, e2)) -> binary empty 9 AssocLeft e1 e2
             (SAbs, (x, e)) -> 
                 (8.5, text "fun" <+> text x <+> text "->" $+$ 
                         nest 4 (pPrintPrec l 0 e))
@@ -120,7 +119,7 @@ instance Pretty Exp where
                 (8.5, text "if" <+> pPrintPrec l 0 e1 $+$
                       text "then" <+> pPrintPrec l 0 e2 $+$
                       text "else" <+> pPrintPrec l 0 e3)
-            (SCond, (cond, e1, e2)) -> binary name opPrec assoc e1 e2
+            (SCond, (cond, e1, e2)) -> binary (text name) opPrec assoc e1 e2
                 where
                 (opPrec, name, assoc) = condInfo cond
 

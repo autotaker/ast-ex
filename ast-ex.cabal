@@ -17,10 +17,14 @@ library
   hs-source-dirs:      src
   exposed-modules:     Language.ToyML.Syntax.Base
                      , Language.ToyML.Syntax.Parsed
+                     , Language.ToyML.Syntax.Desugar
                      , Language.ToyML.Parser
+                     , Language.ToyML.Eval
   build-depends:       base >= 4.9 && < 5
                      , parsec >= 3.1
                      , prettyclass >= 1.0
+                     , containers >= 0.5.7
+                     , mtl >= 2.2.1
   default-extensions:  GADTs, TypeFamilies, DataKinds
   default-language:    Haskell2010
   ghc-options:         -Wall
